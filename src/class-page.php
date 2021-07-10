@@ -85,11 +85,11 @@ class Page {
 	public $help = null;
 
 	/**
-	 * Hold scripts and styles.
+	 * The function that run on page to enqueue scripts.
 	 *
-	 * @var array
+	 * @var callable
 	 */
-	public $assets = null;
+	public $enqueue_scripts = null;
 
 	/**
 	 * Check if plugin is network active.
@@ -154,7 +154,7 @@ class Page {
 		$priority = $this->parent ? intval( $this->position ) : -1;
 		add_action( $this->is_network ? 'network_admin_menu' : 'admin_menu', [ $this, 'register_page' ], $priority );
 
-		if ( $this->is_current_page() && ! is_null( $this->onsave ) && is_callable( $this->onsave ) ) {
+		if ( $this->is_current_page() && null !== $this->onsave && is_callable( $this->onsave ) ) {
 			add_action( 'admin_init', [ $this, 'save' ] );
 		}
 	}
@@ -180,7 +180,7 @@ class Page {
 			add_action( 'admin_head-' . $this->hook_suffix, [ $this, 'contextual_help' ] );
 		}
 
-		if ( ! empty( $this->assets ) ) {
+		if ( null !== $this->enqueue_scripts && is_callable( $this->enqueue_scripts ) ) {
 			add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 		}
 	}
@@ -268,9 +268,7 @@ class Page {
 			return;
 		}
 
-		foreach ( $this->assets  as $asset ) {
-			$asset->enqueue();
-		}
+		call_user_func( $this->enqueue_scripts, $this );
 	}
 
 	/**
