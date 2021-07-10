@@ -1,0 +1,21 @@
+{
+	"name": "awesome9/admin-page",
+	"description": "WordPress page class.",
+	"type": "library",
+	"license": "GPL-3.0-or-later",
+	"authors": [
+		{
+			"name": "Awesome9",
+			"email": "me@awesome9.co"
+		}
+	],
+	"require": {
+		"php": ">=5.6"
+	},
+	"config": {
+		"optimize-autoloader": true
+	},
+	"autoload": {
+		"classmap" : [ "src/" ]
+	}
+}
